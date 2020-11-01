@@ -17,7 +17,7 @@ ezfe310 features:
 * A small, well-documented runtime for C and assembly programs (`src/runtime/crt0.s`)
 * Nearly every register and field in the FE310 exposed to C programs as an lvalue/bitmask (`include/mmio.h`)
 * A lightweight, legible library for basic embedded functionality (`ez.h`)
-* Example programs (`src/examples`)
+* Example programs (`src/examples/`)
 
 Quickstart
 ----------
@@ -36,7 +36,6 @@ Todo
 * Verify that the linker script, etc. won't brick anything.
 * Reliable UART input.
 * Interrupts.
-* Builtin LEDs.
 * More features from C's standard library.
 * Explore GCC features (binary literals, etc.).
 * Heap allocation.
@@ -51,5 +50,7 @@ Thanks
 The following helped provide a foundation for the project (and are good resources in their own right):
 
 <https://wiki.osdev.org/HiFive-1_Bare_Bones>
+
 <https://gitlab.com/Leonhart231/hifive1>
+
 <https://github.com/sifive/freedom-e-sdk/tree/v1_0>
