@@ -5,6 +5,7 @@
 #include "hifive1_pins.h"
 #include "string_mem.h"
 
+bool uart_enabled = false;
 void uartsetup( void )
 {
 	// Set up oscillators.
@@ -26,11 +27,15 @@ void uartsetup( void )
 
 	// Wait briefly.
 	for ( volatile int i = 0; i < 10000; i++ );
+
+	uart_enabled = true;
 }
 
 // Prints a null-terminated string to UART 0.
-void print( char * s )
+void print( const char * s )
 {
+	if ( !uart_enabled ) return;
+
 	for ( ; *s != '\0'; s++ )
 	{
 		while ( UART0_TXDATA & UART0_TXDATA_FULL ); // wait until uart empties
@@ -39,7 +44,7 @@ void print( char * s )
 }
 
 // Prints a null-terminated string to UART 0, beginning a new line.
-void printline( char * s )
+void printline( const char * s )
 {
 	print( s );
 	print( "\n\r" );
@@ -48,6 +53,8 @@ void printline( char * s )
 // Reads a character from UART 0.
 char readchar()
 {
+	if ( !uart_enabled ) return '\0';
+
 	while ( UART0_RXDATA & UART0_RXDATA_EMPTY ); // wait until uart fills
 	return (char)( UART0_RXDATA & UART0_RXDATA_DATA );
 }
@@ -115,7 +122,6 @@ char * intstr( int n ) // TODO
 }
 #endif
 
-
 void _Noreturn exit( int x )
 {
 	(void)( x );
@@ -123,3 +129,5 @@ void _Noreturn exit( int x )
 }
 
 void main( void );
+
+#include "assert.h"

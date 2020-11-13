@@ -55,3 +55,12 @@ uint strlen( char * s )
 	return len;
 }
 
+bool strsame( char * a, char * b )
+{
+	for ( ; *a == *b; a++, b++ )
+	{
+		if ( *a == '\0' ) return true;
+	}
+	return false;
+}
+

@@ -27,9 +27,15 @@ CFLAGS += -march=$(RISCV_ARCH) -mabi=$(RISCV_ABI) -mcmodel=medany
 LDFLAGS += -T $(LINKERSCRIPT)
 LDFLAGS += -nostdlib
 
+default: compile
+
 .PHONY: compile
 compile: crt0.o
 	$(RISCV_GCC) $(PPFLAGS) $(CFLAGS) $(CSRCS) $(LDFLAGS)
+
+.PHONY: test
+test: crt0.o
+	$(RISCV_GCC) $(PPFLAGS) $(CFLAGS) src/tests/eztest.c $(LDFLAGS)
 
 crt0.o: src/runtime/crt0.s
 	mkdir -p build
