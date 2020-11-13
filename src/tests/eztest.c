@@ -28,6 +28,20 @@ void main( void )
 	assert( strsame( uintstr( 4294967294U ), "4294967294" ) );
 	assert( strsame( uintstr( 4294967295U ), "4294967295" ) );
 
+	// Test `intstr`.
+	assert( strsame( intstr( -2147483647 - 1 ), "-2147483648" ) );
+	assert( strsame( intstr( -2147483647 ), "-2147483647" ) );
+	assert( strsame( intstr( -123456789 ), "-123456789" ) );
+	assert( strsame( intstr( -1 ), "-1" ) );
+	assert( strsame( intstr( 0 ), "0" ) );
+	assert( strsame( intstr( 1 ), "1" ) );
+	assert( strsame( intstr( 123456789 ), "123456789" ) );
+	assert( strsame( intstr( 2147483646 ), "2147483646" ) );
+	assert( strsame( intstr( 2147483647 ), "2147483647" ) );
+
+#define INT_MAX		2147483647
+#define INT_MIN		(-INT_MAX - 1)
+
 	// Recreate the HiFive1 LEDTest.
 	printline( "Does the LED work? (Y/N)" );
 

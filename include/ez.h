@@ -59,22 +59,6 @@ char readchar()
 	return (char)( UART0_RXDATA & UART0_RXDATA_DATA );
 }
 
-#if 1 - 1
-// Reads up to `n` bytes of a line from UART 0, and stores them without null termination in `a`.
-void readline( int n, char * a ) // FIXME: this doesn't work
-{
-	for ( ; n > 0; n--, a++ )
-	{
-		char c = readchar();
-		switch ( c )
-		{
-			case '\r': case'\n': case'\0': return;
-			default: *a = c;
-		}
-	}
-}
-#endif
-
 // Returns a pointer to a null-terminated string containing `n` written in hexadecimal.
 char * hexstr( uint n )
 {
@@ -112,15 +96,41 @@ char * uintstr( uint n )
 	return s;
 }
 
-#if 1 - 1
 // Returns a pointer to a null-terminated string containing `n` written in decimal,
 // possibly with a leading negative sign.
-char * intstr( int n ) // TODO
+char * intstr( int n )
 {
 	static char s[ 12 ]; // 12 bytes can store "-2147483648\0"
+
+	// Handle the special case of -2147483648.
+	if ( n == -2147483648 )
+	{
+		for ( int i = 0; i < 12; i++ ) s[ i ] = "-2147483648\0"[ i ];
+		return s;
+	}
+
+	// If `n` is negative, we'll need to shift things over by 1.
+	int neg = n < 0;
+	if ( neg ) n = -n;
+
+	// Precompute the number of digits in `n` so we can avoid leading zeroes.
+	int len = 1;
+	for ( int ncpy = n / 10u; ncpy > 0u; len++ ) ncpy /= 10u;
+
+	// Populate the first `len` characters with `n`'s digits,
+	// shifted over by 1 if we need a negative sign.
+	for ( int i = len - 1 + neg; i >= 0 + neg; i-- )
+	{
+		s[ i ] = '0' + n % 10u;
+		n /= 10u;
+	}
+	if ( neg ) s[ 0 ] = '-';
+
+	// Nullify the rest of the string.
+	for ( int i = 11; i >= len + neg; i-- ) s[ i ] = '\0';
+
 	return s;
 }
-#endif
 
 void _Noreturn exit( int x )
 {
