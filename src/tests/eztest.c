@@ -39,9 +39,6 @@ void main( void )
 	assert( strsame( intstr( 2147483646 ), "2147483646" ) );
 	assert( strsame( intstr( 2147483647 ), "2147483647" ) );
 
-#define INT_MAX		2147483647
-#define INT_MIN		(-INT_MAX - 1)
-
 	// Recreate the HiFive1 LEDTest.
 	printline( "Does the LED work? (Y/N)" );
 
